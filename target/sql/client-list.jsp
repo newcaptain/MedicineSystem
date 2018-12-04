@@ -47,7 +47,7 @@
 	</div>
 	<xblock>
 		<button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-		<button class="layui-btn" onclick="x_admin_show('添加用户','./client-add.html',600,400)"><i class="layui-icon"></i>添加
+		<button class="layui-btn" onclick="x_admin_show('添加用户','./client-add.html',720,550)"><i class="layui-icon"></i>添加
 		</button>
 		<span class="x-right" style="line-height:40px">共有数据：<c:out value="${rows}"/> 条</span>
 	</xblock>
@@ -64,8 +64,7 @@
 				<th>年龄</th>
 				<th>地址</th>
 				<th>手机</th>
-				<th>加入时间</th>
-				<!-- <th>购物车</th> -->
+				<th>备注</th>
 				<th>操作</th>
 			</tr>
 		</thead>
@@ -82,14 +81,14 @@
 					<td><c:out value="${item.cage}"/> </td>
 					<td><c:out value="${item.caddress}"/> </td>
 					<td><c:out value="${item.cphone}"/> </td>
-					<td><c:out value="${item.cdate}"/> </td>
+					<td><c:out value="${item.cremark}"/> </td>
 					<!-- <td class="td-status">
 					  <span class="layui-btn layui-btn-normal layui-btn-mini">已启用</span></td> -->
 					<td class="td-manage">
 						<button class="layui-btn layui-btn-warm layui-btn-xs" onclick="x_admin_show('编辑','admin-edit.html')"><i
 								class="layui-icon">&#xe698;</i>购物车
 						</button>
-						<button class="layui-btn layui-btn layui-btn-xs" onclick="x_admin_show('编辑','/ClientEdit?id=${item.cno}')"><i
+						<button class="layui-btn layui-btn layui-btn-xs" onclick="x_admin_show('编辑','/ClientEdit?id=${item.cno}',720,550)"><i
 								class="layui-icon">&#xe642;</i>编辑
 						</button>
 						<button class="layui-btn-danger layui-btn layui-btn-xs" onclick="member_del(this,${item.cno})"
@@ -102,7 +101,9 @@
 	</table>
 	<div class="page">
 		<div>
-			<a class="prev" href="/ClientList?currentPage=1">&lt;&lt;</a>
+			<c:if test="${rows != 0}">
+				<a class="prev" href="/ClientList?currentPage=1">&lt;&lt;</a>
+			</c:if>
 			<c:forEach var="i" items="${currentPage-1},${currentPage},${currentPage+1}">
 				<c:if test="${(i>0 && i<=pageCount)}">
 					<c:if test="${i != currentPage}">
@@ -113,7 +114,9 @@
 					</c:if>
 				</c:if>
 			</c:forEach>
-			<a class="next" href="/ClientList?currentPage=${pageCount}">&gt;&gt;</a>
+			<c:if test="${rows != 0}">
+				<a class="next" href="/ClientList?currentPage=${pageCount}">&gt;&gt;</a>
+			</c:if>
 		</div>
 	</div>
 </div>

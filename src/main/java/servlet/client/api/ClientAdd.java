@@ -20,18 +20,20 @@ public class ClientAdd extends HttpServlet {
         String cage = request.getParameter("cage");
         String caddress = request.getParameter("caddress");
         String cphone = request.getParameter("cphone");
+        String cremark = request.getParameter("cremark");
 
         response.setContentType("application/json;charset=utf-8");
         PrintWriter pw = response.getWriter();
         try {
             Connection cnn = db.dbutils.getConnection();
-            String sql = "insert into client(cname,csex,cage,caddress,cphone) value(?,?,?,?,?);";
+            String sql = "insert into client(cname,csex,cage,caddress,cphone,cremark) value(?,?,?,?,?,?);";
             PreparedStatement pstmt = cnn.prepareStatement(sql);
             pstmt.setString(1, cname);
             pstmt.setString(2, csex);
             pstmt.setString(3, cage);
             pstmt.setString(4, caddress);
             pstmt.setString(5, cphone);
+            pstmt.setString(6, cremark);
             int rs = pstmt.executeUpdate();
             if (rs >= 1) {
                 // 添加用户成功

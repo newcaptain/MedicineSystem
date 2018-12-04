@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="UTF-8">
 	<title>欢迎页面-X-admin2.0</title>
@@ -21,14 +22,14 @@
 </head>
 
 <body>
-<div class="x-body layui-anim layui-anim-up">
+<div class="x-body">
 	<form class="layui-form">
 		<div class="layui-form-item">
 			<label for="L_name" class="layui-form-label">
 				<span class="x-red">*</span>姓名
 			</label>
 			<div class="layui-input-inline">
-				<input type="text" id="L_name" name="cname" required lay-verify="required"
+				<input type="text" id="L_name" name="aname" required="" lay-verify="required"
 				       autocomplete="off" class="layui-input">
 			</div>
 		</div>
@@ -37,51 +38,31 @@
 				<span class="x-red">*</span>性别
 			</label>
 			<div class="layui-input-block">
-				<input type="radio" name="csex" value="男" title="男" checked>
-				<input type="radio" name="csex" value="女" title="女" >
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<label for="L_age" class="layui-form-label">
-				<span class="x-red">*</span>年龄
-			</label>
-			<div class="layui-input-inline">
-				<input type="text" id="L_age" name="cage" required lay-verify="required|number"
-				       autocomplete="off" class="layui-input">
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<label for="L_address" class="layui-form-label">
-				<span class="x-red">*</span>住址
-			</label>
-			<div class="layui-input-inline">
-				<input type="text" id="L_address" name="caddress" required lay-verify="required"
-				       autocomplete="off" class="layui-input">
+				<input type="radio" name="asex" value="男" title="男" checked>
+				<input type="radio" name="asex" value="女" title="女" >
 			</div>
 		</div>
 		<div class="layui-form-item">
 			<label for="L_phone" class="layui-form-label">
-				<span class="x-red">*</span>电话
+				<span class="x-red">*</span>手机
 			</label>
 			<div class="layui-input-inline">
-				<input type="text" id="L_phone" name="cphone" required lay-verify="required|phone"
+				<input type="text" id="L_phone" name="aphone" required="" lay-verify="required|phone"
 				       autocomplete="off" class="layui-input">
 			</div>
 		</div>
 		<div class="layui-form-item">
-			<label for="L_remark" class="layui-form-label">
-				<span class="x-red">*</span>备注
-			</label>
-			<div class="layui-input-inline">
-				<input type="text" id="L_remark" name="cremark" required lay-verify="required"
-				       autocomplete="off" class="layui-input">
+			<label class="layui-form-label"><span class="x-red">*</span>备注</label>
+			<div class="layui-input-block">
+				<input type="radio" name="aremark" title="超级管理员" value="超级管理员" checked>
+				<input type="radio" name="aremark" title="普通员工" value="普通员工">
 			</div>
 		</div>
 		<div class="layui-form-item">
-			<label class="layui-form-label">
+			<label for="L_repass" class="layui-form-label">
 			</label>
 			<button class="layui-btn" lay-filter="add" lay-submit="">
-				添加
+				增加
 			</button>
 		</div>
 	</form>
@@ -92,28 +73,34 @@
         var form = layui.form
             , layer = layui.layer;
 
-        // api 提交
-        form.on('submit(add)', function (data) {
-            var load = layer.load();
-            $.ajax({
-	            url: '/api/client/add',
-	            type: 'POST',
-	            data: data.field,
-	            success: function (res) {
-	                layer.close(load);
-		            if (res.code == 0) {
-		                layer.msg("添加成功", {icon: 1}, function () {
-			                var index = parent.layer.getFrameIndex(window.name);
-			                parent.layer.close(index);
-			                parent.location.reload();
-                        });
-		            } else {
-		                layer.alert(res.msg,{icon: 2});
-		            }
+        //自定义验证规则
+        form.verify({
+            nikename: function (value) {
+                if (value.length < 5) {
+                    return '昵称至少得5个字符啊';
                 }
+            }
+            , pass: [/(.+){6,12}$/, '密码必须6到12位']
+            , repass: function (value) {
+                if ($('#L_pass').val() != $('#L_repass').val()) {
+                    return '两次密码不一致';
+                }
+            }
+        });
+
+        //监听提交
+        form.on('submit(add)', function (data) {
+            console.log(data);
+            //发异步，把数据提交给php
+            layer.alert("增加成功", {icon: 6}, function () {
+                // 获得frame索引
+                var index = parent.layer.getFrameIndex(window.name);
+                //关闭当前frame
+                parent.layer.close(index);
             });
             return false;
         });
+
 
     });
 </script>

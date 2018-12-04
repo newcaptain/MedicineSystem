@@ -80,6 +80,15 @@
 			</div>
 		</div>
 		<div class="layui-form-item">
+			<label for="L_remark" class="layui-form-label">
+				<span class="x-red">*</span>备注
+			</label>
+			<div class="layui-input-inline">
+				<input type="text" id="L_remark" name="cremark" required lay-verify="required"
+				       autocomplete="off" class="layui-input" value="${client.cremark}">
+			</div>
+		</div>
+		<div class="layui-form-item">
 			<label class="layui-form-label">
 			</label>
 			<button class="layui-btn" lay-filter="edit" lay-submit="">
