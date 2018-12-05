@@ -20,30 +20,35 @@ public class AgencyAdd extends HttpServlet {
         String aphone = request.getParameter("aphone");
         String aremark = request.getParameter("aremark");
 
-        response.setContentType("application/json;charset=uft-8");
+        response.setContentType("application/json;charset=utf-8");
         PrintWriter pw = response.getWriter();
-        try {
-            Connection cnn = db.dbutils.getConnection();
-            String sql = "insert into agency(aname, asex, aphone, aremark) value(?, ?, ?, ?);";
-            PreparedStatement pstmt = cnn.prepareStatement(sql);
-            pstmt.setObject(1, aname);
-            pstmt.setObject(2, asex);
-            pstmt.setObject(3, aphone);
-            pstmt.setObject(4, aremark);
-            int rs = pstmt.executeUpdate();
-            if (rs > 0) {
-                // 插入成功
-                pw.print("{\"code\": 0}");
-            } else {
-                pw.print("{\"code\": -1, \"msg\": \"添加员工失败\"}");
-            }
-            pw.close();
-            db.dbutils.close(cnn, pstmt, null);
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        String sql = "insert into agency(aname, asex, aphone, aremark) value(?, ?, ?, ?);";
+        if(new db.dbquery().insert(sql, aname, asex, aphone, aremark) > 0) {
+            pw.print("{\"code\": 0}");
+        } else {
+            pw.print("{\"code\": -1, \"msg\": \"添加员工失败\"}");
         }
+        pw.close();
+//        try {
+//            Connection cnn = db.dbutils.getConnection();
+//            String sql = "insert into agency(aname, asex, aphone, aremark) value(?, ?, ?, ?);";
+//            PreparedStatement pstmt = cnn.prepareStatement(sql);
+//            pstmt.setObject(1, aname);
+//            pstmt.setObject(2, asex);
+//            pstmt.setObject(3, aphone);
+//            pstmt.setObject(4, aremark);
+//            int rs = pstmt.executeUpdate();
+//            if (rs > 0) {
+//                // 插入成功
+//                pw.print("{\"code\": 0}");
+//            } else {
+//                pw.print("{\"code\": -1, \"msg\": \"添加员工失败\"}");
+//            }
+//            pw.close();
+//            db.dbutils.close(cnn, pstmt, null);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
     }
 
 }

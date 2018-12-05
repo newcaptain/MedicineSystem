@@ -16,7 +16,7 @@ public class dbutils {
         return ds;
     }
 
-    public static Connection getConnection() throws PropertyVetoException, SQLException {
+    public static Connection getConnection() throws SQLException {
         return ds.getConnection();
     }
 

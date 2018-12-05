@@ -45,8 +45,6 @@ public class DoEdit extends HttpServlet {
             }
             pw.close();
             db.dbutils.close(cnn, pstmt, null);
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         }

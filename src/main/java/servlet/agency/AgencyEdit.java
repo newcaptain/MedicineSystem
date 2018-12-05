@@ -35,8 +35,6 @@ public class AgencyEdit extends HttpServlet {
             request.setAttribute("agency", hs);
 
             request.getRequestDispatcher("/agency-edit.jsp").forward(request, response);
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         }

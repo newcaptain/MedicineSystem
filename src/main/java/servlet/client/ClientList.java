@@ -64,8 +64,6 @@ public class ClientList extends HttpServlet {
             db.dbutils.close(cnn, pstmt, rs);
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
         }
     }
 }

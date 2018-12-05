@@ -85,7 +85,7 @@
 					<!-- <td class="td-status">
 					  <span class="layui-btn layui-btn-normal layui-btn-mini">已启用</span></td> -->
 					<td class="td-manage">
-						<button class="layui-btn layui-btn-warm layui-btn-xs" onclick="x_admin_show('编辑','admin-edit.html')"><i
+						<button class="layui-btn layui-btn-warm layui-btn-xs" onclick="x_admin_show('编辑','agency-edit.jsp')"><i
 								class="layui-icon">&#xe698;</i>购物车
 						</button>
 						<button class="layui-btn layui-btn layui-btn-xs" onclick="x_admin_show('编辑','/ClientEdit?id=${item.cno}',720,550)"><i

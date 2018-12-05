@@ -79,7 +79,7 @@
 						<!-- <a onclick="member_stop(this,'10001')" href="javascript:;"  title="启用">
 						  <i class="layui-icon">&#xe601;</i>
 						</a> -->
-						<a title="编辑" onclick="x_admin_show('编辑','admin-edit.html')" href="javascript:;">
+						<a title="编辑" onclick="x_admin_show('编辑','/AgencyEdit?ano=${item.ano}')" href="javascript:;">
 							<i class="layui-icon">&#xe642;</i>
 						</a>
 						<a title="删除" onclick="agency_del(this,${item.ano})" href="javascript:;">

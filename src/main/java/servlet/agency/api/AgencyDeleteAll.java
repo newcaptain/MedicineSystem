@@ -16,28 +16,32 @@ import java.sql.SQLException;
 public class AgencyDeleteAll extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] anos = request.getParameterValues("anos[]");
-        try {
-            Connection cnn = db.dbutils.getConnection();
-            String sql = "delete from agency where ano=?";
-            PreparedStatement pstmt = cnn.prepareStatement(sql);
-            for (int i=0; i<anos.length; i++) {
-                pstmt.setObject(1, anos[i]);
-                pstmt.addBatch();
-            }
-            pstmt.executeBatch();
-            response.setContentType("application/json;charset=utf-8");
-            PrintWriter pw = response.getWriter();
+        response.setContentType("application/json;charset=utf-8");
+        PrintWriter pw = response.getWriter();
+        String sql = "delete from agency where ano=?";
+        if (new db.dbquery().delete(sql, anos) == 0) {
             pw.print("{\"code\": 0}");
-            pw.close();
-            db.dbutils.close(cnn, pstmt, null);
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } else {
+            pw.print("{\"code\": -1, \"msg\": \"删除员工失败\"}");
         }
+        pw.close();
+//        try {
+//            Connection cnn = db.dbutils.getConnection();
+//            String sql = "delete from agency where ano=?";
+//            PreparedStatement pstmt = cnn.prepareStatement(sql);
+//            for (int i=0; i<anos.length; i++) {
+//                pstmt.setObject(1, anos[i]);
+//                pstmt.addBatch();
+//            }
+//            pstmt.executeBatch();
+//            response.setContentType("application/json;charset=utf-8");
+//            PrintWriter pw = response.getWriter();
+//            pw.print("{\"code\": 0}");
+//            pw.close();
+//            db.dbutils.close(cnn, pstmt, null);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
 }

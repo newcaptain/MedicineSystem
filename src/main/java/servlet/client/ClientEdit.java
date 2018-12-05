@@ -36,8 +36,6 @@ public class ClientEdit extends HttpServlet {
             request.getRequestDispatcher("/client-edit.jsp").forward(request, response);
 
             db.dbutils.close(cnn, pstmt, rst);
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         }

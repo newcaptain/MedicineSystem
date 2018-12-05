@@ -19,23 +19,28 @@ public class AgencyDelete extends HttpServlet {
 
         response.setContentType("application/json; charset=utf-8");
         PrintWriter pw = response.getWriter();
-        try {
-            Connection cnn = db.dbutils.getConnection();
-            String sql = "delete from agency where ano=?";
-            PreparedStatement pstmt = cnn.prepareStatement(sql);
-            pstmt.setObject(1, ano);
-            int rs = pstmt.executeUpdate();
-            if (rs > 0) {
-                pw.print("{\"code\": 0}");
-            } else {
-                pw.print("{\"code\": -1, \"msg\": \"删除员工失败\"}");
-            }
-            pw.close();
-            db.dbutils.close(cnn, pstmt, null);
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        String sql = "delete from agency where ano=?";
+        if (new db.dbquery().delete(sql, ano) == 0) {
+            pw.print("{\"code\": 0}");
+        } else {
+            pw.print("{\"code\": -1, \"msg\": \"删除员工失败\"}");
         }
+        pw.close();
+//        try {
+//            Connection cnn = db.dbutils.getConnection();
+//            String sql = "delete from agency where ano=?";
+//            PreparedStatement pstmt = cnn.prepareStatement(sql);
+//            pstmt.setObject(1, ano);
+//            int rs = pstmt.executeUpdate();
+//            if (rs > 0) {
+//                pw.print("{\"code\": 0}");
+//            } else {
+//                pw.print("{\"code\": -1, \"msg\": \"删除员工失败\"}");
+//            }
+//            pw.close();
+//            db.dbutils.close(cnn, pstmt, null);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
     }
 }

@@ -61,8 +61,6 @@ public class AgencyList extends HttpServlet {
             request.getRequestDispatcher("/agency-list.jsp").forward(request, response);
 
             db.dbutils.close(cnn, pstmt, rst);
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         }
