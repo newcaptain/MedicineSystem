@@ -9,34 +9,15 @@ import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.sql.*;
 import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet(name = "AgencyEdit", urlPatterns = "/AgencyEdit")
 public class AgencyEdit extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String ano = request.getParameter("ano");
-        try {
-            String sql = "select * from agency where ano=?";
-            Connection cnn = db.dbutils.getConnection();
-            PreparedStatement pstmt = cnn.prepareStatement(sql);
-            pstmt.setObject(1, ano);
-            ResultSet rst = pstmt.executeQuery();
-            ResultSetMetaData rsmd = rst.getMetaData();
-            int colNums = rsmd.getColumnCount();
-            rst.next();
-
-            HashMap hs = new HashMap(colNums);
-            for (int i=1; i<=colNums; i++) {
-                hs.put(rsmd.getColumnName(i), rst.getObject(i));
-            }
-            request.setAttribute("agency", hs);
-
-            request.getRequestDispatcher("/agency-edit.jsp").forward(request, response);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        String sql = "select * from agency where ano=?";
+        Map map = new db.dbquery().findOne(sql, ano);
+        request.setAttribute("agency", map);
+        request.getRequestDispatcher("/agency-edit.jsp").forward(request, response);
     }
 }

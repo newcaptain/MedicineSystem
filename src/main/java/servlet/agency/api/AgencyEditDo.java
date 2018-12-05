@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -20,18 +21,14 @@ public class AgencyEditDo extends HttpServlet {
         String aphone = request.getParameter("aphone");
         String aremark = request.getParameter("aremark");
 
-//        Connection cnn = null;
-//        try {
-//            cnn = db.dbutils.getConnection();
-//            PreparedStatement pstmt = cnn.prepareStatement(sql);
-//        } catch (PropertyVetoException e) {
-//            e.printStackTrace();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        response.setContentType("application/json; charset=utf-8");
+        PrintWriter pw = response.getWriter();
+        String sql = "update agency set aname=?, asex=?, aphone=?, aremark=? where ano=?";
+        if (new db.dbquery().updateQuery(sql, aname, asex, aphone, aremark, ano) > 0) {
+            pw.print("{\"code\": 0}");
+        } else {
+            pw.print("{\"code\": -1, \"msg\": \"修改员工信息失败\"}");
+        }
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
 }

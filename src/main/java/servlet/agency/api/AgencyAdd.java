@@ -23,32 +23,12 @@ public class AgencyAdd extends HttpServlet {
         response.setContentType("application/json;charset=utf-8");
         PrintWriter pw = response.getWriter();
         String sql = "insert into agency(aname, asex, aphone, aremark) value(?, ?, ?, ?);";
-        if(new db.dbquery().insert(sql, aname, asex, aphone, aremark) > 0) {
+        if(new db.dbquery().updateQuery(sql, aname, asex, aphone, aremark) > 0) {
             pw.print("{\"code\": 0}");
         } else {
             pw.print("{\"code\": -1, \"msg\": \"添加员工失败\"}");
         }
         pw.close();
-//        try {
-//            Connection cnn = db.dbutils.getConnection();
-//            String sql = "insert into agency(aname, asex, aphone, aremark) value(?, ?, ?, ?);";
-//            PreparedStatement pstmt = cnn.prepareStatement(sql);
-//            pstmt.setObject(1, aname);
-//            pstmt.setObject(2, asex);
-//            pstmt.setObject(3, aphone);
-//            pstmt.setObject(4, aremark);
-//            int rs = pstmt.executeUpdate();
-//            if (rs > 0) {
-//                // 插入成功
-//                pw.print("{\"code\": 0}");
-//            } else {
-//                pw.print("{\"code\": -1, \"msg\": \"添加员工失败\"}");
-//            }
-//            pw.close();
-//            db.dbutils.close(cnn, pstmt, null);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
     }
 
 }

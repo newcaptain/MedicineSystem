@@ -1,7 +1,5 @@
 package servlet.client.api;
 
-import db.dbquery;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,9 +12,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-@WebServlet(name = "ClientAdd", urlPatterns = "/api/client/add")
-public class ClientAdd extends HttpServlet {
+@WebServlet(name = "ClientEditDo", urlPatterns = "/api/client/edit")
+public class ClientEditDo extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String cno = request.getParameter("cno");
         String cname = request.getParameter("cname");
         String csex = request.getParameter("csex");
         String cage = request.getParameter("cage");
@@ -24,14 +23,14 @@ public class ClientAdd extends HttpServlet {
         String cphone = request.getParameter("cphone");
         String cremark = request.getParameter("cremark");
 
-        response.setContentType("application/json;charset=utf-8");
+        response.setContentType("application/json; charset=utf-8");
         PrintWriter pw = response.getWriter();
-        String sql = "insert into client(cname,csex,cage,caddress,cphone,cremark) value(?,?,?,?,?,?);";
-        if (new dbquery().updateQuery(sql, cname, csex, cage, caddress, cphone, cremark) > 0) {
+
+        String sql = "update client set cname=?, csex=?, cage=?, caddress=?, cphone=?, cremark=? where cno=?";
+        if (new db.dbquery().updateQuery(sql, cname, csex, cage, caddress, cphone, cremark, cno) > 0) {
             pw.print("{\"code\": 0}");
         } else {
-            pw.print("{\"code\": -1, \"msg\": \"添加用户失败\"}");
+            pw.print("{\"code\": -1, \"msg\": \"修改顾客信息失败\"}");
         }
-        pw.close();
     }
 }

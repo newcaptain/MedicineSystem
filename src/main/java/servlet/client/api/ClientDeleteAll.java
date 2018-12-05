@@ -30,25 +30,5 @@ public class ClientDeleteAll extends HttpServlet {
             pw.print("{\"code\": -1, \"msg\": \"删除顾客失败\"}");
         }
         pw.close();
-//        try {
-//            // 执行SQL
-//            Connection cnn = db.dbutils.getConnection();
-//            String sql = "delete from client where cno=?";
-//            PreparedStatement pstmt = cnn.prepareStatement(sql);
-//            for (int i=0; i<cnos.length; i++) {
-//                pstmt.setObject(1, cnos[i]);
-//                pstmt.addBatch();
-//            }
-//            pstmt.executeBatch();
-//            // 正常响应
-//            pw.print("{\"code\": 0}");
-//            pw.close();
-//
-//            db.dbutils.close(cnn, pstmt, null);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            pw.print("{\"code\": -1, \"msg\": \"删除顾客失败\"}");
-//            pw.close();
-//        }
     }
 }

@@ -28,25 +28,6 @@ public class ClientDelete extends HttpServlet {
             pw.print("{\"code\": -1, \"msg\": \"删除顾客失败\"}");
         }
         pw.close();
-//        try {
-//            Connection cnn = db.dbutils.getConnection();
-//            String sql = "delete from client where cno=?";
-//            PreparedStatement pstmt = cnn.prepareStatement(sql);
-//            pstmt.setString(1, cno);
-//            int res = pstmt.executeUpdate();
-//            if (res >= 1) {
-//                // 删除成功
-//                pw.print("{\"code\": 0}");
-//            } else {
-//                // 删除失败
-//                pw.print("{\"code\": -1, \"msg\": \"删除顾客失败\"}");
-//            }
-//
-//            pw.close();
-//            db.dbutils.close(cnn, pstmt, null);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
     }
 
 }

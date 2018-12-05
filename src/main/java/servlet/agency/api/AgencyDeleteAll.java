@@ -25,23 +25,6 @@ public class AgencyDeleteAll extends HttpServlet {
             pw.print("{\"code\": -1, \"msg\": \"删除员工失败\"}");
         }
         pw.close();
-//        try {
-//            Connection cnn = db.dbutils.getConnection();
-//            String sql = "delete from agency where ano=?";
-//            PreparedStatement pstmt = cnn.prepareStatement(sql);
-//            for (int i=0; i<anos.length; i++) {
-//                pstmt.setObject(1, anos[i]);
-//                pstmt.addBatch();
-//            }
-//            pstmt.executeBatch();
-//            response.setContentType("application/json;charset=utf-8");
-//            PrintWriter pw = response.getWriter();
-//            pw.print("{\"code\": 0}");
-//            pw.close();
-//            db.dbutils.close(cnn, pstmt, null);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
     }
 
 }

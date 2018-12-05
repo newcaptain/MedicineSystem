@@ -26,21 +26,5 @@ public class AgencyDelete extends HttpServlet {
             pw.print("{\"code\": -1, \"msg\": \"删除员工失败\"}");
         }
         pw.close();
-//        try {
-//            Connection cnn = db.dbutils.getConnection();
-//            String sql = "delete from agency where ano=?";
-//            PreparedStatement pstmt = cnn.prepareStatement(sql);
-//            pstmt.setObject(1, ano);
-//            int rs = pstmt.executeUpdate();
-//            if (rs > 0) {
-//                pw.print("{\"code\": 0}");
-//            } else {
-//                pw.print("{\"code\": -1, \"msg\": \"删除员工失败\"}");
-//            }
-//            pw.close();
-//            db.dbutils.close(cnn, pstmt, null);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
     }
 }
