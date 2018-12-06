@@ -1,10 +1,11 @@
-<%@page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page pageEncoding="utf-8" %>
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="UTF-8">
-	<title>医药信息管理系统</title>
+	<title>欢迎页面-X-admin2.0</title>
 	<meta name="renderer" content="webkit">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport"
@@ -37,15 +38,15 @@
 <div class="x-body">
 	<div class="layui-row">
 		<form class="layui-form layui-col-md12 x-so">
-			<%--<input class="layui-input" placeholder="开始日" name="start" id="start">--%>
-			<%--<input class="layui-input" placeholder="截止日" name="end" id="end">--%>
+			<!--<input class="layui-input" placeholder="开始日" name="start" id="start">-->
+			<!--<input class="layui-input" placeholder="截止日" name="end" id="end">-->
 			<input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
 			<button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
 		</form>
 	</div>
 	<xblock>
 		<button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-		<button class="layui-btn" onclick="x_admin_show('添加员工','./agency-add.html',560,500)"><i class="layui-icon"></i>添加
+		<button class="layui-btn" onclick="x_admin_show('添加药品','./medicine-add.html', 600, 400)"><i class="layui-icon"></i>添加药品
 		</button>
 		<span class="x-right" style="line-height:40px">共有数据：${rows} 条</span>
 	</xblock>
@@ -56,35 +57,33 @@
 				<div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i
 						class="layui-icon">&#xe605;</i></div>
 			</th>
-			<th>编号</th>
-			<th>姓名</th>
-			<th>性别</th>
-			<th>手机</th>
-			<th>备注</th>
+			<th>药品编号</th>
+			<th>药品名称</th>
+			<th>服用方式</th>
+			<th>功效</th>
 			<th>操作</th>
 		</thead>
 		<tbody>
 			<c:forEach var="item" items="${list}">
 				<tr>
 					<td>
-						<div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='${item.ano}'><i class="layui-icon">&#xe605;</i>
+						<div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='${item.mno}'><i class="layui-icon">&#xe605;</i>
 						</div>
 					</td>
-					<td>${item.ano}</td>
-					<td>${item.aname}</td>
-					<td>${item.asex}</td>
-					<td>${item.aphone}</td>
-					<td>${item.aremark}</td>
+					<td>${item.mno}</td>
+					<td>${item.mname}</td>
+					<td>${item.mmode}</td>
+					<td>${item.mefficacy}</td>
 					<td class="td-manage">
-						<!-- <a onclick="member_stop(this,'10001')" href="javascript:;"  title="启用">
-						  <i class="layui-icon">&#xe601;</i>
-						</a> -->
-						<a title="编辑" onclick="x_admin_show('编辑','/AgencyEdit?ano=${item.ano}')" href="javascript:;">
-							<i class="layui-icon">&#xe642;</i>
-						</a>
-						<a title="删除" onclick="agency_del(this,${item.ano})" href="javascript:;">
-							<i class="layui-icon">&#xe640;</i>
-						</a>
+						<button class="layui-btn layui-btn-normal layui-btn-xs" onclick="x_admin_show('编辑','/MedicineEdit?mno=${item.mno}')"><i
+								class="layui-icon">&#xe642;</i>编辑
+						</button>
+						<button class="layui-btn layui-btn-danger layui-btn-xs" onclick="medicine_del(this,${item.mno})"><i
+								class="layui-icon">&#xe640;</i>删除
+						</button>
+						<button class="layui-btn layui-btn-warm layui-btn-xs" onclick="x_admin_show('购买','/MedicineShop?mno=${item.mno}')"><i
+								class="layui-icon">&#xe698;</i>购买
+						</button>
 					</td>
 				</tr>
 			</c:forEach>
@@ -93,7 +92,7 @@
 	<div class="page">
 		<div>
 			<c:if test="${rows != 0}">
-				<a class="prev" href="/AgencyList?currentPage=1">&lt;&lt;</a>
+				<a class="prev" href="/MedicineList?currentPage=1">&lt;&lt;</a>
 			</c:if>
 			<c:forEach items="${currentPage-1},${currentPage},${currentPage+1}" var="page">
 				<c:if test="${page>0 && page<=pageCount}">
@@ -101,56 +100,60 @@
 						<span class="current">${page}</span>
 					</c:if>
 					<c:if test="${page != currentPage}">
-						<a class="num" href="/AgencyList?currentPage=${page}">${page}</a>
+						<a class="num" href="/MedicineList?currentPage=${page}">${page}</a>
 					</c:if>
 				</c:if>
 			</c:forEach>
 			<c:if test="${rows != 0}">
-				<a class="next" href="/AgencyList?currentPage=${pageCount}">&gt;&gt;</a>
+				<a class="next" href="/MedicineList?currentPage=${pageCount}">&gt;&gt;</a>
 			</c:if>
+
 		</div>
 	</div>
 
 </div>
 <script>
-    /*用户-删除*/
-    function agency_del(obj, no) {
+    function medicine_del(obj, id) {
         layer.confirm('确认要删除吗？', function (index) {
             var load = layer.load();
             $.ajax({
-	            url: "/api/agency/delete",
+	            url: '/api/medicine/delete',
 	            type: 'POST',
-	            data: {ano: no},
+	            data: {mno: id},
 	            success: function (res) {
 	                layer.close(load);
 		            if (res.code == 0) {
                         $(obj).parents("tr").remove();
-		                layer.msg("删除成功",{icon: 1});
+                        layer.msg('药品删除成功!', {icon: 1, time: 1000});
 		            } else {
-		                layer.alert(res.msg, {icon: 2})
+		                layer.alert(res.msg, {icon: 2});
 		            }
                 }
             });
         });
     }
+
     function delAll(argument) {
-        layer.confirm("确定要删除员工吗？", function (index) {
-            var data = tableCheck.getData();
+        var data = tableCheck.getData();
+        layer.confirm('确认要删除吗？', function (index) {
+            var load = layer.load();
             $.ajax({
-                url: '/api/agency/deleteAll',
-                type: 'POST',
-                data: {anos: data},
-                success: function (res) {
-                    if (res.code == 0) {
+	            url: '/api/medicine/deleteAll',
+	            type: 'POST',
+	            data: {mnos: data},
+	            success: function (res) {
+	                layer.close(load);
+		            if (res.code == 0) {
                         $(".layui-form-checked").not('.header').parents('tr').remove();
-                        layer.msg("删除成功",{icon: 1});
-                    } else {
-                        layer.alert(res.msg, {icon: 2});
-                    }
+                        layer.msg('药品删除成功', {icon: 1});
+		            } else {
+		                layer.alert(res.msg, {icon: 2});
+		            }
                 }
             });
         });
     }
 </script>
 </body>
+
 </html>

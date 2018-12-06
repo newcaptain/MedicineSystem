@@ -4,7 +4,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>欢迎页面-X-admin2.0</title>
+	<title>医药信息管理系统</title>
 	<meta name="renderer" content="webkit">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport"
@@ -93,7 +93,7 @@
 	<div class="page">
 		<div>
 			<c:if test="${rows != 0}">
-				<a class="prev" href="">&lt;&lt;</a>
+				<a class="prev" href="/AgencyList?currentPage=1">&lt;&lt;</a>
 			</c:if>
 			<c:forEach items="${currentPage-1},${currentPage},${currentPage+1}" var="page">
 				<c:if test="${page>0 && page<=pageCount}">
@@ -101,56 +101,18 @@
 						<span class="current">${page}</span>
 					</c:if>
 					<c:if test="${page != currentPage}">
-						<a class="num" href="">${page}</a>
+						<a class="num" href="/AgencyList?currentPage=${page}">${page}</a>
 					</c:if>
 				</c:if>
 			</c:forEach>
 			<c:if test="${rows != 0}">
-				<a class="next" href="">&gt;&gt;</a>
+				<a class="next" href="/AgencyList?currentPage=${pageCount}">&gt;&gt;</a>
 			</c:if>
 		</div>
 	</div>
 
 </div>
 <script>
-    layui.use('laydate', function () {
-        var laydate = layui.laydate;
-
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#start' //指定元素
-        });
-
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#end' //指定元素
-        });
-    });
-
-    /*用户-停用*/
-    function member_stop(obj, id) {
-        layer.confirm('确认要停用吗？', function (index) {
-
-            if ($(obj).attr('title') == '启用') {
-
-                //发异步把用户状态进行更改
-                $(obj).attr('title', '停用')
-                $(obj).find('i').html('&#xe62f;');
-
-                $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
-                layer.msg('已停用!', {icon: 5, time: 1000});
-
-            } else {
-                $(obj).attr('title', '启用')
-                $(obj).find('i').html('&#xe601;');
-
-                $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
-                layer.msg('已启用!', {icon: 5, time: 1000});
-            }
-
-        });
-    }
-
     /*用户-删除*/
     function agency_del(obj, no) {
         layer.confirm('确认要删除吗？', function (index) {
@@ -180,17 +142,15 @@
                 data: {anos: data},
                 success: function (res) {
                     if (res.code == 0) {
-                        layer.msg("删除成功",{icon: 1});
                         $(".layui-form-checked").not('.header').parents('tr').remove();
+                        layer.msg("删除成功",{icon: 1});
                     } else {
                         layer.alert(res.msg, {icon: 2});
                     }
                 }
             });
         });
-
     }
 </script>
 </body>
-
 </html>

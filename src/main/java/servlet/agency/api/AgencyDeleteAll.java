@@ -1,5 +1,8 @@
 package servlet.agency.api;
 
+import com.google.protobuf.Api;
+import utils.ApiResult;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,15 +19,13 @@ import java.sql.SQLException;
 public class AgencyDeleteAll extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] anos = request.getParameterValues("anos[]");
-        response.setContentType("application/json;charset=utf-8");
-        PrintWriter pw = response.getWriter();
+
         String sql = "delete from agency where ano=?";
         if (new db.dbquery().delete(sql, anos) == 0) {
-            pw.print("{\"code\": 0}");
+            new ApiResult(response).sendSuccess();
         } else {
-            pw.print("{\"code\": -1, \"msg\": \"删除员工失败\"}");
+            new ApiResult(response).sendFailed("删除员工失败");
         }
-        pw.close();
     }
 
 }

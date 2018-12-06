@@ -1,6 +1,7 @@
 package servlet.client.api;
 
 import db.dbquery;
+import utils.ApiResult;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,14 +25,11 @@ public class ClientAdd extends HttpServlet {
         String cphone = request.getParameter("cphone");
         String cremark = request.getParameter("cremark");
 
-        response.setContentType("application/json;charset=utf-8");
-        PrintWriter pw = response.getWriter();
         String sql = "insert into client(cname,csex,cage,caddress,cphone,cremark) value(?,?,?,?,?,?);";
         if (new dbquery().updateQuery(sql, cname, csex, cage, caddress, cphone, cremark) > 0) {
-            pw.print("{\"code\": 0}");
+            new ApiResult(response).sendSuccess();
         } else {
-            pw.print("{\"code\": -1, \"msg\": \"添加用户失败\"}");
+            new ApiResult(response).sendFailed("添加用户失败");
         }
-        pw.close();
     }
 }

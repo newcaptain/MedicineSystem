@@ -55,7 +55,37 @@ public class dbquery {
     }
 
     /**
-     * 查找一页多条记录
+     * 查询表中所有记录
+     */
+    public List findAll(String sql, Object... args) {
+        try {
+            pstmt = getConnection().prepareStatement(sql);
+            for (int i=0; i<args.length; i++) {
+                pstmt.setObject(i+1, args[i]);
+            }
+            rst = pstmt.executeQuery();
+            ResultSetMetaData rsmd = rst.getMetaData();
+            int colNums = rsmd.getColumnCount();
+            List list = new ArrayList();
+            while (rst.next()) {
+                Map map = new HashMap(colNums);
+                for (int i=1; i<=colNums; i++) {
+                    map.put(rsmd.getColumnName(i), rst.getObject(i));
+                }
+                list.add(map);
+            }
+            return list;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            closeAll();
+        }
+    }
+
+    /**
+     * 查找一页多条记录, 针对分页的查询
      */
     public List findOnePage(String sql, int skip, int limit) {
         List list = new ArrayList();
@@ -132,7 +162,7 @@ public class dbquery {
                 pstmt.addBatch();
             }
             pstmt.executeBatch();
-            return 0;
+            return 1;
         } catch (SQLException e) {
             e.printStackTrace();
             return -1;

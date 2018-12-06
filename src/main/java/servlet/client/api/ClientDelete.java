@@ -1,5 +1,7 @@
 package servlet.client.api;
 
+import utils.ApiResult;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,19 +17,13 @@ import java.sql.SQLException;
 @WebServlet(name = "ClientDelete", urlPatterns = "/api/client/delete")
 public class ClientDelete extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // 拿Response
-        response.setContentType("application/json; charset=utf-8");
-        PrintWriter pw = response.getWriter();
-
-        // 执行SQL语句
         String cno = request.getParameter("cno");
-        String sql = "delete from client where cno=?";
-        if (new db.dbquery().delete(sql, cno) == 0) {
-            pw.print("{\"code\": 0}");
+        String sql = "delete client, userorder from client left join userorder on client.cno=userorder.cno where cno=?";
+        if (new db.dbquery().delete(sql, cno) > 0) {
+            new ApiResult(response).sendSuccess();
         } else {
-            pw.print("{\"code\": -1, \"msg\": \"删除顾客失败\"}");
+            new ApiResult(response).sendFailed("删除顾客失败");
         }
-        pw.close();
     }
 
 }

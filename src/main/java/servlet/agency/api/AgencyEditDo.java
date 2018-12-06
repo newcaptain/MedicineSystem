@@ -1,5 +1,7 @@
 package servlet.agency.api;
 
+import utils.ApiResult;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,13 +23,11 @@ public class AgencyEditDo extends HttpServlet {
         String aphone = request.getParameter("aphone");
         String aremark = request.getParameter("aremark");
 
-        response.setContentType("application/json; charset=utf-8");
-        PrintWriter pw = response.getWriter();
         String sql = "update agency set aname=?, asex=?, aphone=?, aremark=? where ano=?";
         if (new db.dbquery().updateQuery(sql, aname, asex, aphone, aremark, ano) > 0) {
-            pw.print("{\"code\": 0}");
+            new ApiResult(response).sendSuccess();
         } else {
-            pw.print("{\"code\": -1, \"msg\": \"修改员工信息失败\"}");
+            new ApiResult(response).sendFailed("修改员工信息失败");
         }
     }
 

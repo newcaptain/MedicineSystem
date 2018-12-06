@@ -85,14 +85,14 @@
 					<!-- <td class="td-status">
 					  <span class="layui-btn layui-btn-normal layui-btn-mini">已启用</span></td> -->
 					<td class="td-manage">
-						<button class="layui-btn layui-btn-warm layui-btn-xs" onclick="x_admin_show('编辑','agency-edit.jsp')"><i
-								class="layui-icon">&#xe698;</i>购物车
-						</button>
 						<button class="layui-btn layui-btn layui-btn-xs" onclick="x_admin_show('编辑','/ClientEdit?id=${item.cno}',720,550)"><i
 								class="layui-icon">&#xe642;</i>编辑
 						</button>
 						<button class="layui-btn-danger layui-btn layui-btn-xs" onclick="member_del(this,${item.cno})"
 						        href="javascript:;"><i class="layui-icon">&#xe640;</i>删除
+						</button>
+						<button class="layui-btn layui-btn-warm layui-btn-xs" onclick="x_admin_show('编辑','agency-edit.jsp')"><i
+								class="layui-icon">&#xe63c;</i>订单
 						</button>
 					</td>
 				</tr>
@@ -171,10 +171,8 @@
 	                    layer.close(load);
 		                if (res.code == 0) {
 		                    // 正常删除顾客
-			                layer.msg("删除成功", {icon: 1}, function() {
-			                    location.reload();
-			                });
-			                // $(".layui-form-checkbox").not(".header").parents("tr").remove();
+                            $(".layui-form-checkbox").not(".header").parents("tr").remove();
+			                layer.msg("删除成功", {icon: 1});
 		                } else {
 		                    // 删除失败
 			                layer.alert(res.msg, {icon: 2});
@@ -183,7 +181,7 @@
                 });
             });
         }
-
+		return false;
     }
 </script>
 </body>

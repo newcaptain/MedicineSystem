@@ -1,5 +1,7 @@
 package servlet.agency.api;
 
+import utils.ApiResult;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,14 +19,11 @@ public class AgencyDelete extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String ano = request.getParameter("ano");
 
-        response.setContentType("application/json; charset=utf-8");
-        PrintWriter pw = response.getWriter();
         String sql = "delete from agency where ano=?";
         if (new db.dbquery().delete(sql, ano) == 0) {
-            pw.print("{\"code\": 0}");
+            new ApiResult(response).sendSuccess();
         } else {
-            pw.print("{\"code\": -1, \"msg\": \"删除员工失败\"}");
+            new ApiResult(response).sendFailed("删除员工失败");
         }
-        pw.close();
     }
 }

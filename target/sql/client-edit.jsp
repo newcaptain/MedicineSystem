@@ -126,8 +126,6 @@
             });
             return false;
         });
-
-
     });
 </script>
 </body>

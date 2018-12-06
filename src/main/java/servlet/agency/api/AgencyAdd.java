@@ -1,5 +1,7 @@
 package servlet.agency.api;
 
+import utils.ApiResult;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,15 +22,12 @@ public class AgencyAdd extends HttpServlet {
         String aphone = request.getParameter("aphone");
         String aremark = request.getParameter("aremark");
 
-        response.setContentType("application/json;charset=utf-8");
-        PrintWriter pw = response.getWriter();
         String sql = "insert into agency(aname, asex, aphone, aremark) value(?, ?, ?, ?);";
         if(new db.dbquery().updateQuery(sql, aname, asex, aphone, aremark) > 0) {
-            pw.print("{\"code\": 0}");
+            new ApiResult(response).sendSuccess();
         } else {
-            pw.print("{\"code\": -1, \"msg\": \"添加员工失败\"}");
+            new ApiResult(response).sendFailed("添加员工失败");
         }
-        pw.close();
     }
 
 }

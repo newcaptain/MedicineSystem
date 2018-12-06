@@ -1,5 +1,7 @@
 package servlet.client.api;
 
+import utils.ApiResult;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,14 +25,11 @@ public class ClientEditDo extends HttpServlet {
         String cphone = request.getParameter("cphone");
         String cremark = request.getParameter("cremark");
 
-        response.setContentType("application/json; charset=utf-8");
-        PrintWriter pw = response.getWriter();
-
         String sql = "update client set cname=?, csex=?, cage=?, caddress=?, cphone=?, cremark=? where cno=?";
         if (new db.dbquery().updateQuery(sql, cname, csex, cage, caddress, cphone, cremark, cno) > 0) {
-            pw.print("{\"code\": 0}");
+            new ApiResult(response).sendSuccess();
         } else {
-            pw.print("{\"code\": -1, \"msg\": \"修改顾客信息失败\"}");
+            new ApiResult(response).sendFailed("修改顾客信息失败");
         }
     }
 }

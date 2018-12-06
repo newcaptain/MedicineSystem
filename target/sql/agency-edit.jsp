@@ -91,10 +91,11 @@
 	            success: function(res) {
                     layer.close(load);
                     if (res.code == 0) {
-                        layer.msg("修改成功",{icon: 1});
-                        var index = parent.layer.getFrameIndex(window.name);
-                        parent.layer.close(index);
-                        parent.location.reload();
+                        layer.msg("修改成功",{icon: 1}, function () {
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                            parent.location.reload();
+                        });
                     } else {
                         layer.alert(res.msg, {icon: 2});
                     }
