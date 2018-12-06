@@ -22,7 +22,7 @@ public class ClientDeleteAll extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // 获取要删除的数组
         String[] cnos = request.getParameterValues("cnos[]");
-        String sql = "delete from client where cno=?";
+        String sql = "delete client, userorder from client left join userorder on client.cno=userorder.cno where client.cno=?";
         if (new db.dbquery().delete(sql, cnos) == 0){
             new ApiResult(response).sendSuccess();
         } else {

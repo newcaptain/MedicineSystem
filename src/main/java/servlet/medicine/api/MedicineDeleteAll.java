@@ -14,7 +14,7 @@ import java.io.IOException;
 public class MedicineDeleteAll extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] mnos = request.getParameterValues("mnos[]");
-        String sql = "delete from medicine where mno=?";
+        String sql = "delete medicine, userorder from medicine left join userorder on medicine.mno=userorder.mno where medicine.mno=?";
         if (new dbquery().delete(sql, mnos) == 0) {
             new ApiResult(response).sendSuccess();
         } else {

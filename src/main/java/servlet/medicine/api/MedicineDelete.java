@@ -13,7 +13,7 @@ import java.io.IOException;
 public class MedicineDelete extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String mno = request.getParameter("mno");
-        String sql = "delete from medicine where mno=?";
+        String sql = "delete medicine, userorder from medicine left join userorder on medicine.mno=userorder.mno where medicine.mno=?";
         if (new db.dbquery().delete(sql, mno) == 0) {
             new ApiResult(response).sendSuccess();
         } else {

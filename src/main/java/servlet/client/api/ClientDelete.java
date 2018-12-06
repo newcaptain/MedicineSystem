@@ -18,12 +18,11 @@ import java.sql.SQLException;
 public class ClientDelete extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String cno = request.getParameter("cno");
-        String sql = "delete client, userorder from client left join userorder on client.cno=userorder.cno where cno=?";
-        if (new db.dbquery().delete(sql, cno) > 0) {
+        String sql = "delete client, userorder from client left join userorder on client.cno=userorder.cno where client.cno=?";
+        if (new db.dbquery().delete(sql, cno) == 0) {
             new ApiResult(response).sendSuccess();
         } else {
             new ApiResult(response).sendFailed("删除顾客失败");
         }
     }
-
 }

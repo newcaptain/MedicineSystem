@@ -162,7 +162,7 @@ public class dbquery {
                 pstmt.addBatch();
             }
             pstmt.executeBatch();
-            return 1;
+            return 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return -1;

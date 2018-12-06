@@ -19,7 +19,7 @@ public class AgencyDelete extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String ano = request.getParameter("ano");
 
-        String sql = "delete from agency where ano=?";
+        String sql = "delete agency, userorder from agency left join userorder on agency.ano=userorder.ano where agency.ano=?";
         if (new db.dbquery().delete(sql, ano) == 0) {
             new ApiResult(response).sendSuccess();
         } else {
