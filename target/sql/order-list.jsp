@@ -1,4 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt"%>
+
 <%@page pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -25,12 +27,6 @@
 
 <body>
 <div class="x-nav">
-      <span class="layui-breadcrumb">
-        <a href="">首页</a>
-        <a href="">演示</a>
-        <a>
-          <cite>导航元素</cite></a>
-      </span>
 	<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
 	   href="javascript:location.replace(location.href);" title="刷新">
 		<i class="layui-icon" style="line-height:30px">ဂ</i></a>
@@ -76,12 +72,12 @@
 					<td>${item.cname}</td>
 					<td>${item.mname}</td>
 					<td>${item.aname}</td>
-					<td>${item.odate}</td>
+					<td><fmt:formatDate pattern="yyyy-mm-dd HH:mm" value="${item.odate}" /></td>
 					<td class="td-manage">
-						<a title="查看" onclick="x_admin_show('编辑','order-view.html')" href="javascript:;">
+						<a title="查看" onclick="x_admin_show('查看订单','/OrderView?id=${item.id}', 580, 550)" href="javascript:;">
 							<i class="layui-icon">&#xe63c;</i>
 						</a>
-						<a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
+						<a title="删除" onclick="order_del(this,${item.id})" href="javascript:;">
 							<i class="layui-icon">&#xe640;</i>
 						</a>
 					</td>
@@ -126,24 +122,45 @@
         });
     });
 
-    /*用户-删除*/
-    function member_del(obj, id) {
+    /*订单-删除*/
+    function order_del(obj, id) {
         layer.confirm('确认要删除吗？', function (index) {
-            //发异步删除数据
-            $(obj).parents("tr").remove();
-            layer.msg('已删除!', {icon: 1, time: 1000});
+            var load = layer.load();
+            $.ajax({
+	            url: '/api/order/delete',
+	            type: 'POST',
+	            data: {id: id},
+	            success: function(res) {
+	                layer.close(load);
+	                if (res.code == 0) {
+                        $(obj).parents("tr").remove();
+                        layer.msg('已删除!', {icon: 1, time: 1000});
+	                } else {
+	                    layer.alert(res.msg, {icon: 2});
+	                }
+	            }
+            });
         });
     }
 
-
     function delAll(argument) {
-
         var data = tableCheck.getData();
-
-        layer.confirm('确认要删除吗？' + data, function (index) {
-            //捉到所有被选中的，发异步进行删除
-            layer.msg('删除成功', {icon: 1});
-            $(".layui-form-checked").not('.header').parents('tr').remove();
+        layer.confirm('确认要删除吗？', function (index) {
+            var load = layer.load();
+            $.ajax({
+	            url: '/api/order/deleteAll',
+	            type: 'POST',
+	            data: {ids: data},
+	            success: function (res) {
+	                layer.close(load);
+		            if (res.code == 0) {
+                        layer.msg('删除成功', {icon: 1});
+                        $(".layui-form-checked").not('.header').parents('tr').remove();
+		            } else {
+		                layer.alert(res.msg, {icon: 2});
+		            }
+                }
+            });
         });
     }
 </script>

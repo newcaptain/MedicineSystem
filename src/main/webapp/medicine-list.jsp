@@ -25,12 +25,6 @@
 
 <body>
 <div class="x-nav">
-      <span class="layui-breadcrumb">
-        <a href="">首页</a>
-        <a href="">演示</a>
-        <a>
-          <cite>导航元素</cite></a>
-      </span>
 	<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
 	   href="javascript:location.replace(location.href);" title="刷新">
 		<i class="layui-icon" style="line-height:30px">ဂ</i></a>
@@ -75,7 +69,7 @@
 					<td>${item.mmode}</td>
 					<td>${item.mefficacy}</td>
 					<td class="td-manage">
-						<button class="layui-btn layui-btn-normal layui-btn-xs" onclick="x_admin_show('编辑','/MedicineEdit?mno=${item.mno}')"><i
+						<button class="layui-btn layui-btn-normal layui-btn-xs" onclick="x_admin_show('编辑','/MedicineEdit?mno=${item.mno}',650,500)"><i
 								class="layui-icon">&#xe642;</i>编辑
 						</button>
 						<button class="layui-btn layui-btn-danger layui-btn-xs" onclick="medicine_del(this,${item.mno})"><i

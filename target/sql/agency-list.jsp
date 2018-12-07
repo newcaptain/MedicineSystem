@@ -24,12 +24,6 @@
 
 <body>
 <div class="x-nav">
-      <span class="layui-breadcrumb">
-        <a href="">首页</a>
-        <a href="">演示</a>
-        <a>
-          <cite>导航元素</cite></a>
-      </span>
 	<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
 	   href="javascript:location.replace(location.href);" title="刷新">
 		<i class="layui-icon" style="line-height:30px">ဂ</i></a>
@@ -79,7 +73,7 @@
 						<!-- <a onclick="member_stop(this,'10001')" href="javascript:;"  title="启用">
 						  <i class="layui-icon">&#xe601;</i>
 						</a> -->
-						<a title="编辑" onclick="x_admin_show('编辑','/AgencyEdit?ano=${item.ano}')" href="javascript:;">
+						<a title="编辑" onclick="x_admin_show('编辑','/AgencyEdit?ano=${item.ano}',650,500)" href="javascript:;">
 							<i class="layui-icon">&#xe642;</i>
 						</a>
 						<a title="删除" onclick="agency_del(this,${item.ano})" href="javascript:;">
