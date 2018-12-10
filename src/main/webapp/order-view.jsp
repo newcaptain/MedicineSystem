@@ -1,4 +1,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@page language="java" pageEncoding="utf-8" %>
 <!DOCTYPE html>
 <html>
@@ -21,35 +23,46 @@
 	<script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
 	<![endif]-->
 	<style>
-		html,body {
-			margin: 0;
-			paddin: 0;
-			height: 94%;
+		/*html,body {*/
+			/*margin: 0;*/
+			/*paddin: 0;*/
+			/*height: 94%;*/
+		/*}*/
+		.layui-card {
+			background: #EEE8AA;
 		}
 	</style>
 </head>
 <body>
-<div class="x-body" style="background: #EEE8AA;height: 100%;" >
-	<div class="layui-card">
-		<div class="layui-card-header">
-			订单号：${item.id}
-		</div>
-		<div class="layui-card-body">
-			<ul>
-				<li>顾客： ${item.cname}</li>
-				<li>性别：${item.csex}</li>
-				<li>年龄：${item.cage}</li>
-				<li>症状：${item.symptom}</li>
-				<li>联系方式：${item.cphone}</li>
-				<li>药品名称： ${item.mname}</li>
-				<li>药品功效：${item.mefficacy}</li>
-				<li>服用方式：${item.mmode}</li>
-				<li>销售人员：${item.aname}</li>
-				<li>下单时间：<fmt:formatDate pattern="yyyy-mm-dd HH:mm" value="${item.odate}" /></li>
-			</ul>
-		</div>
-	</div>
-	<button class="layui-btn" style="margin: 40px auto; display: block;" id="confirm">确定</button>
+<div class="x-body"  >
+	<c:if test="${fn:length(items) > 0}">
+		<c:forEach items="${items}" var="item">
+			<div class="layui-card">
+				<div class="layui-card-header">
+					订单号：${item.id}
+				</div>
+				<div class="layui-card-body">
+					<ul>
+						<li>顾客： ${item.cname}</li>
+						<li>性别：${item.csex}</li>
+						<li>年龄：${item.cage}</li>
+						<li>症状：${item.symptom}</li>
+						<li>联系方式：${item.cphone}</li>
+						<li>药品名称： ${item.mname}</li>
+						<li>药品功效：${item.mefficacy}</li>
+						<li>服用方式：${item.mmode}</li>
+						<li>销售人员：${item.aname}</li>
+						<li>下单时间：<fmt:formatDate pattern="yyyy-mm-dd HH:mm" value="${item.odate}" /></li>
+					</ul>
+				</div>
+			</div>
+		</c:forEach>
+		<button class="layui-btn" style="margin: 40px auto; display: block;" id="confirm">确定</button>
+	</c:if>
+	<c:if test="${fn:length(items) == 0}">
+		<c:out value="暂无订单信息" />
+	</c:if>
+
 </div>
 <script>
     layui.use(['layer'], function () {

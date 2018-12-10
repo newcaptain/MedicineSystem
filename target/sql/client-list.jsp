@@ -33,8 +33,8 @@
 <div class="x-body">
 	<div class="layui-row">
 		<form class="layui-form layui-col-md12 x-so">
-			<input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
-			<button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+			<input type="text" name="cname" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+			<button class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
 		</form>
 	</div>
 	<xblock>
@@ -83,7 +83,7 @@
 						<button class="layui-btn-danger layui-btn layui-btn-xs" onclick="member_del(this,${item.cno})"
 						        href="javascript:;"><i class="layui-icon">&#xe640;</i>删除
 						</button>
-						<button class="layui-btn layui-btn-warm layui-btn-xs" onclick="x_admin_show('编辑','agency-edit.jsp')"><i
+						<button class="layui-btn layui-btn-warm layui-btn-xs" onclick="x_admin_show('已购药品','/ClientOrder?cno=${item.cno}',580, 550)"><i
 								class="layui-icon">&#xe63c;</i>订单
 						</button>
 					</td>
@@ -113,17 +113,13 @@
 	</div>
 </div>
 <script>
-    layui.use('laydate', function () {
-        var laydate = layui.laydate;
+    layui.use('form', function () {
+        var form = layui.form;
+        $ = layui.jquery;
 
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#start' //指定元素
-        });
-
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#end' //指定元素
+        form.on("submit(search)", function (data) {
+	        console.log(data.field);
+	        
         });
     });
 

@@ -1,4 +1,4 @@
-package servlet.order;
+package servlet.client;
 
 import db.dbquery;
 
@@ -8,21 +8,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-@WebServlet(name = "OrderView", urlPatterns = "/OrderView")
-public class OrderView extends HttpServlet {
+@WebServlet(name = "ClientOrder", urlPatterns = "/ClientOrder")
+public class ClientOrder extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String id = request.getParameter("id");
+        String cno = request.getParameter("cno");
         String sql = "select id, cname, csex, cage, cphone, mname, mefficacy, mmode, aname, odate, symptom " +
-                "from userorder u inner join client c inner join agency a inner join medicine m " +
+                "from userorder u inner join client c inner join medicine m inner join agency a " +
                 "on u.cno=c.cno && u.ano=a.ano && u.mno=m.mno " +
-                "where u.id=?";
-        Map map = new dbquery().findOne(sql, id);
-        List list = new ArrayList();
-        list.add(map);
+                "where c.cno=?";
+        List list = new dbquery().findAll(sql, cno);
         request.setAttribute("items", list);
         request.getRequestDispatcher("/order-view.jsp").forward(request, response);
     }
