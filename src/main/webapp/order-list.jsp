@@ -7,7 +7,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>欢迎页面-X-admin2.0</title>
+	<title>医药信息管理系统</title>
 	<meta name="renderer" content="webkit">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport"
@@ -34,10 +34,10 @@
 <div class="x-body">
 	<div class="layui-row">
 		<form class="layui-form layui-col-md12 x-so">
-			<input class="layui-input" placeholder="开始日" name="start" id="start">
-			<input class="layui-input" placeholder="截止日" name="end" id="end">
-			<input type="text" name="username" placeholder="请输入订单号" autocomplete="off" class="layui-input">
-			<button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+			<%--<input class="layui-input" placeholder="开始日" name="start" id="start">--%>
+			<%--<input class="layui-input" placeholder="截止日" name="end" id="end">--%>
+			<input type="text" name="ono" placeholder="请输入订单号" autocomplete="off" class="layui-input">
+			<button class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
 		</form>
 	</div>
 	<xblock>
@@ -61,7 +61,7 @@
 			<th>操作</th>
 		</tr>
 		</thead>
-		<tbody>
+		<tbody id="normal_table">
 			<c:forEach var="item" items="${list}">
 				<tr>
 					<td>
@@ -84,6 +84,7 @@
 				</tr>
 			</c:forEach>
 		</tbody>
+		<tbody id="search_table"></tbody>
 	</table>
 	<div class="page">
 		<div>
@@ -108,18 +109,69 @@
 
 </div>
 <script>
-    layui.use('laydate', function () {
-        var laydate = layui.laydate;
+    layui.use( 'form', function () {
+        var form = layui.form;
+        $ = layui.jquery;
 
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#start' //指定元素
-        });
+        var normaltb = $('#normal_table');
+        var searchtb = $('#search_table');
+        var page = $('.page');
 
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#end' //指定元素
-        });
+        form.on("submit(search)", function (data) {
+            if (data.field.ono.trim() == '') {
+                normaltb.show(100);
+                page.show(100);
+                searchtb.hide(100);
+            } else {
+                normaltb.hide();
+                page.hide();
+                searchtb.show(100);
+                $.ajax({
+                    url: '/api/search/order',
+                    type: 'GET',
+                    data: data.field,
+                    success: function (res) {
+                        if (res.code == 0) {
+                            // 找到该记录
+                            // 隐藏正常信息
+                            searchtb.empty();
+                            for (let i=0; i<res.data.length; i++) {
+                                let item = res.data[i];
+                                let html = `
+						            <tr>
+										<td>
+											<div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='\${item.id}'><i class="layui-icon">&#xe605;</i>
+											</div>
+										</td>
+										<td>\${item.id}</td>
+										<td>\${item.cname}</td>
+										<td>\${item.mname}</td>
+										<td>\${item.aname}</td>
+										<td>\${item.odate}</td>
+										<td class="td-manage">
+											<a title="查看" onclick="x_admin_show('查看订单','/OrderView?id=\${item.id}', 580, 550)" href="javascript:;">
+												<i class="layui-icon">&#xe63c;</i>
+											</a>
+											<a title="删除" onclick="order_del(this,\${item.id})" href="javascript:;">
+												<i class="layui-icon">&#xe640;</i>
+											</a>
+										</td>
+									</tr>
+						        `;
+                                searchtb.append(html);
+                            }
+                        } else {
+                            //无该记录
+                            searchtb.empty();
+                            var html = '<tr><td colspan="7" style="text-align: center">没有该订单记录</td></tr>'
+                            searchtb.append(html);
+                        }
+                    }
+                });
+            }
+            return false;
+        })
+
     });
 
     /*订单-删除*/

@@ -5,7 +5,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>欢迎页面-X-admin2.0</title>
+	<title>医药信息管理系统</title>
 	<meta name="renderer" content="webkit">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport"
@@ -34,8 +34,8 @@
 		<form class="layui-form layui-col-md12 x-so">
 			<!--<input class="layui-input" placeholder="开始日" name="start" id="start">-->
 			<!--<input class="layui-input" placeholder="截止日" name="end" id="end">-->
-			<input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
-			<button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+			<input type="text" name="mname" placeholder="请输入药品名" autocomplete="off" class="layui-input">
+			<button class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
 		</form>
 	</div>
 	<xblock>
@@ -57,7 +57,7 @@
 			<th>功效</th>
 			<th>操作</th>
 		</thead>
-		<tbody>
+		<tbody id="normal_table">
 			<c:forEach var="item" items="${list}">
 				<tr>
 					<td>
@@ -82,6 +82,7 @@
 				</tr>
 			</c:forEach>
 		</tbody>
+		<tbody id="search_table"></tbody>
 	</table>
 	<div class="page">
 		<div>
@@ -107,6 +108,71 @@
 
 </div>
 <script>
+
+	layui.use("form", function () {
+		var form = layui.form;
+		$ = layui.jquery;
+
+		var normaltb = $('#normal_table');
+		var searchtb = $('#search_table');
+		var page = $('.page');
+		form.on("submit(search)", function (data) {
+            if (data.field.mname.trim() == '') {
+                normaltb.show(100);
+                page.show(100);
+                searchtb.hide(100);
+            } else {
+                normaltb.hide();
+                page.hide();
+                searchtb.show(100);
+                $.ajax({
+                    url: '/api/search/medicine',
+                    type: 'GET',
+                    data: data.field,
+                    success: function (res) {
+                        if (res.code == 0) {
+                            // 找到该药品
+                            searchtb.empty();
+                            for (let i=0; i<res.data.length; i++) {
+                                let item = res.data[i];
+                                let html = `
+						            <tr>
+										<td>
+											<div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='\${item.mno}'><i class="layui-icon">&#xe605;</i>
+											</div>
+										</td>
+										<td>\${item.mno}</td>
+										<td>\${item.mname}</td>
+										<td>\${item.mmode}</td>
+										<td>\${item.mefficacy}</td>
+										<td class="td-manage">
+											<button class="layui-btn layui-btn-normal layui-btn-xs" onclick="x_admin_show('编辑','/MedicineEdit?mno=\${item.mno}',650,500)"><i
+													class="layui-icon">&#xe642;</i>编辑
+											</button>
+											<button class="layui-btn layui-btn-danger layui-btn-xs" onclick="medicine_del(this,\${item.mno})"><i
+													class="layui-icon">&#xe640;</i>删除
+											</button>
+											<button class="layui-btn layui-btn-warm layui-btn-xs" onclick="x_admin_show('购买','/MedicineShop?mno=\${item.mno}')"><i
+													class="layui-icon">&#xe698;</i>购买
+											</button>
+										</td>
+									</tr>
+						        `;
+                                searchtb.append(html);
+                            }
+                        } else {
+                            //无该顾客信息
+                            searchtb.empty();
+                            var html = '<tr><td colspan="6" style="text-align: center">没有该药品</td></tr>'
+                            searchtb.append(html);
+                        }
+                    }
+                });
+            }
+            return false;
+        });
+    });
+
     function medicine_del(obj, id) {
         layer.confirm('确认要删除吗？', function (index) {
             var load = layer.load();

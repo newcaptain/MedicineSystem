@@ -33,8 +33,8 @@
 		<form class="layui-form layui-col-md12 x-so">
 			<%--<input class="layui-input" placeholder="开始日" name="start" id="start">--%>
 			<%--<input class="layui-input" placeholder="截止日" name="end" id="end">--%>
-			<input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input">
-			<button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+			<input type="text" name="aname" placeholder="请输入员工名" autocomplete="off" class="layui-input">
+			<button class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
 		</form>
 	</div>
 	<xblock>
@@ -57,7 +57,7 @@
 			<th>备注</th>
 			<th>操作</th>
 		</thead>
-		<tbody>
+		<tbody id="normal_table">
 			<c:forEach var="item" items="${list}">
 				<tr>
 					<td>
@@ -83,6 +83,7 @@
 				</tr>
 			</c:forEach>
 		</tbody>
+		<tbody id="search_table"></tbody>
 	</table>
 	<div class="page">
 		<div>
@@ -107,7 +108,76 @@
 
 </div>
 <script>
-    /*用户-删除*/
+	layui.use("form", function () {
+		$ = layui.jquery;
+        var form = layui.form;
+
+        var searchtb = $('#search_table');
+        var normaltb = $('#normal_table');
+        var page = $('.page');
+
+        form.on("submit(search)", function (data) {
+            if (data.field.aname.trim() == '') {
+                normaltb.show(100);
+                page.show(100);
+                searchtb.hide(100);
+            } else {
+                normaltb.hide();
+                page.hide();
+                searchtb.show(100);
+                $.ajax({
+                    url: '/api/search/agency',
+                    type: 'GET',
+                    data: data.field,
+                    success: function (res) {
+                        if (res.code == 0) {
+                            // 找到该员工
+                            // 隐藏正常信息
+                            searchtb.empty();
+                            for (let i=0; i<res.data.length; i++) {
+                                let item = res.data[i];
+                                console.log(item);
+                                let html = `
+						            <tr>
+										<td>
+											<div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='\${item.ano}'><i class="layui-icon">&#xe605;</i>
+											</div>
+										</td>
+										<td>\${item.ano}</td>
+										<td>\${item.aname}</td>
+										<td>\${item.asex}</td>
+										<td>\${item.aphone}</td>
+										<td>\${item.aremark}</td>
+										<td class="td-manage">
+											<!-- <a onclick="member_stop(this,'10001')" href="javascript:;"  title="启用">
+											  <i class="layui-icon">&#xe601;</i>
+											</a> -->
+											<a title="编辑" onclick="x_admin_show('编辑','/AgencyEdit?ano=\${item.ano}',650,500)" href="javascript:;">
+												<i class="layui-icon">&#xe642;</i>
+											</a>
+											<a title="删除" onclick="agency_del(this,\${item.ano})" href="javascript:;">
+												<i class="layui-icon">&#xe640;</i>
+											</a>
+										</td>
+									</tr>
+						        `;
+                                searchtb.append(html);
+                            }
+                        } else {
+                            //无该顾客信息
+                            searchtb.empty();
+                            var html = '<tr><td colspan="7" style="text-align: center">没有该员工</td></tr>'
+                            searchtb.append(html);
+                        }
+                    }
+                });
+            }
+            return false;
+        })
+    });
+
+
+
     function agency_del(obj, no) {
         layer.confirm('确认要删除吗？', function (index) {
             var load = layer.load();

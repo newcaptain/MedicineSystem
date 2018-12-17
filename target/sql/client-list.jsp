@@ -5,7 +5,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>欢迎页面-X-admin2.0</title>
+	<title>医药信息管理系统</title>
 	<meta name="renderer" content="webkit">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport"
@@ -60,7 +60,7 @@
 				<th>操作</th>
 			</tr>
 		</thead>
-		<tbody>
+		<tbody id="normal_table">
 			<c:forEach var="item" items="${list}">
 				<tr>
 					<td>
@@ -90,6 +90,7 @@
 				</tr>
 			</c:forEach>
 		</tbody>
+		<tbody id="search_table"></tbody>
 	</table>
 	<div class="page">
 		<div>
@@ -117,9 +118,71 @@
         var form = layui.form;
         $ = layui.jquery;
 
+        var normaltb = $('#normal_table');
+        var searchtb = $('#search_table');
+        var page = $('.page');
+
         form.on("submit(search)", function (data) {
-	        console.log(data.field);
-	        
+	        if (data.field.cname.trim() == '') {
+		        normaltb.show(100);
+		        page.show(100);
+		        searchtb.hide(100);
+	        } else {
+				normaltb.hide();
+				page.hide();
+				searchtb.show(100);
+                $.ajax({
+                    url: '/api/search/client',
+                    type: 'GET',
+                    data: data.field,
+                    success: function (res) {
+                        if (res.code == 0) {
+                            // 找到该顾客
+                            // 隐藏正常信息
+                            searchtb.empty();
+                            for (let i=0; i<res.data.length; i++) {
+                                let item = res.data[i];
+                                console.log(item);
+                                let html = `
+						    <tr>
+								<td>
+									<div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id=\${item.cno}><i class="layui-icon">&#xe605;</i>
+									</div>
+								</td>
+								<td>\${item.cno}</td>
+								<td>\${item.cname}</td>
+								<td>\${item.csex}</td>
+								<td>\${item.cage}</td>
+								<td>\${item.caddress}</td>
+								<td>\${item.cphone}</td>
+								<td>\${item.cremark}</td>
+								<!-- <td class="td-status">
+								  <span class="layui-btn layui-btn-normal layui-btn-mini">已启用</span></td> -->
+								<td class="td-manage">
+									<button class="layui-btn layui-btn layui-btn-xs" onclick="x_admin_show('编辑','/ClientEdit?id=\${item.cno}',720,550)"><i
+											class="layui-icon">&#xe642;</i>编辑
+									</button>
+									<button class="layui-btn-danger layui-btn layui-btn-xs" onclick="member_del(this,\${item.cno})"
+									        href="javascript:;"><i class="layui-icon">&#xe640;</i>删除
+									</button>
+									<button class="layui-btn layui-btn-warm layui-btn-xs" onclick="x_admin_show('已购药品','/ClientOrder?cno=\${item.cno}',580, 550)"><i
+											class="layui-icon">&#xe63c;</i>订单
+									</button>
+								</td>
+							</tr>
+						    `;
+                                searchtb.append(html);
+                            }
+                        } else {
+                            //无该顾客信息
+	                        searchtb.empty();
+	                        var html = '<tr><td colspan="9" style="text-align: center">没有该顾客</td></tr>'
+	                        searchtb.append(html);
+                        }
+                    }
+                });
+	        }
+			return false;
         });
     });
 
