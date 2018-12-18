@@ -21,7 +21,7 @@ public class DoLogin extends HttpServlet {
         if (username.equals("admin") && password.equals("123")) {
             // 登录成功
             pw.print("{\"code\": \"0\"}");
-            session.setAttribute("token", true);
+            session.setAttribute("isLogin", true);
         } else {
             pw.print("{\"code\": \"-1\"}");
         }
