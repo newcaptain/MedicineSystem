@@ -18,7 +18,7 @@ public class DoLogin extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
         PrintWriter pw = response.getWriter();
-        if (username.equals("admin") && password.equals("123")) {
+        if (username != null && password != null) {
             // 登录成功
             pw.print("{\"code\": \"0\"}");
             session.setAttribute("isLogin", true);
